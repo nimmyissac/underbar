@@ -386,6 +386,19 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+     var args = Array.prototype.slice.call(arguments,2);
+     return _.map(collection, function(element){
+       if(typeof functionOrKey === "function"){
+         return functionOrKey.apply(element,args);
+       }else if(Array.isArray(element)){
+         return (Array.prototype[functionOrKey].apply(element,args));
+       }else{
+       if(typeof element === "string"){
+         return String.prototype[functionOrKey].apply(element,args);
+        }
+       }
+    });
+
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -408,6 +421,9 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    return _.reduce(nestedArray,function(result, element){
+      return result.concat((Array.isArray(element)) ? _.flatten(element): element);
+    },[]);
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains

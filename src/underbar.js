@@ -239,29 +239,27 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-    for(var i=1;i<arguments.length;i++){
-    var keyArray = Object.keys(arguments[i]);
-    var objToBeAdded = arguments[i];
-    _.each(keyArray,function(element){
-     obj[element] = objToBeAdded[element];
-   });
-  }
-  return obj;
+    var sources = Array.prototype.slice.call(arguments,1);
+    return _.reduce(sources,function(extended, source){
+    for(var key in source){
+      extended[key] = source[key];
+    }
+    return extended;
+    },obj);
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
-    for(var i=1;i<arguments.length;i++){
-    var keyArray = Object.keys(arguments[i]);
-    var objToBeAdded = arguments[i];
-    _.each(keyArray,function(element){
-     if(!(element in obj)){
-     obj[element] = objToBeAdded[element];
-     }
-   });
-  }
-  return obj;
+    var sources = Array.prototype.slice.call(arguments,1);
+    return _.reduce(sources,function(extended, source){
+    for(var key in source){
+      if (!(key in extended)){
+      extended[key] = source[key];
+    }
+    }
+    return extended;
+    },obj);
   };
 
 

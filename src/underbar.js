@@ -191,21 +191,17 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-   var isFunction = (iterator === undefined) ? false : true;
+  // var isFunction = (iterator === undefined) ? false : true;
+    if(iterator=== undefined){
+        iterator = _.identity;
+      }
+      
    return _.reduce(collection,function(passed,element){
-    if(isFunction){
-      if(!(iterator(element))){
-      passed = false;
-      }
-    }else{
-       if(!element){
-       passed = false;
-       }
-      }
-      return passed;
-   },true);
-  };
 
+     var result = ((iterator(element) === null) || (iterator(element) === undefined) || (iterator(element) === NaN) || (iterator(element) === 0) || (iterator(element) ==="")) ? false : iterator(element);
+      return result && passed;
+     },true);
+  };
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {

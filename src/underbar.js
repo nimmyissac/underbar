@@ -205,14 +205,18 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
-   var flag = false;
-   _.each(collection,function(element){
-     if(_.every([element],iterator)){
-     flag = true;
-     }
-   });
-   return flag;
+    // if all the condition are false, then every will return true. if anyone of the condition is true, then every will return false
+    var wrapperFunction;
+    if(iterator === undefined){
+      wrapperFunction = function(element){
+        return !(_.identity(element));
+      };
+    }else{
+      wrapperFunction = function(element){
+        return !(iterator(element));
+      };
+    }
+    return !(_.every(collection,wrapperFunction));
   };
 
 
